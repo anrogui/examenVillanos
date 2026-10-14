@@ -112,8 +112,7 @@ class Menu:
             try:
                 o=int(input("Ingrese una opción: "))
                 if o==1:
-                    #self.gestion.agregarMiembro()
-                    print("La opcion 1 está en desarrollo.")
+                    self.menuCrearMiembro()
                 elif o==2:
                     #self.gestion.listarPlantilla()
                     print("La opcion 2 está en desarrollo.")
@@ -167,3 +166,41 @@ class Menu:
             except Exception:
                 logger.exception("Error no controlado en el menú.")
                 print("Se ha producido un error. Consulta el archivo aplicacion.log.")
+
+    def menuCrearMiembro(self):
+        print("¿Qué tipo de miembro quieres agregar?")
+        print("1.Jugador")
+        print("2.Cuerpo técnico")
+        tipo = input("Ingrese el tipo (1 o 2): ").strip()
+        if tipo == "1":
+            nombre = input("Ingrese el nombre del jugador: ").strip()
+            apellidos = input("Ingrese los apellidos del jugador: ").strip()
+            posicion=input("Ingrese la posicion del jugador: ").strip()
+            if posicion != "portero" and posicion != "defensa" and posicion != "centrocampista" and posicion != "delantero":
+                print("Posición no válida. Debe ser portero, defensa, centrocampista o delantero.")
+                logger.warning("Opción de menú(posición) no válida: %s", tipo)
+            else:
+                try:
+                    self.gestion.agregarJugador(nombre, apellidos,posicion)
+                except ValueError as e:
+                    print(f"Error al agregar jugador: {e}")
+                    logger.warning("Error al agregar jugador: %s", e)
+
+        if tipo=="2":
+            nombre = input("Ingrese el nombre del miembro del cuerpo técnico: ").strip()
+            apellidos = input("Ingrese los apellidos del miembro del cuerpo técnico: ").strip()
+            rol=input("Ingrese el rol del miembro del cuerpo técnico: ").strip()
+            if rol != "entrenador" and rol != "preparador físico" and rol != "médico" and rol != "utillero":
+                print("Rol no válido. Debe ser entrenador, preparador físico, médico o utillero.")
+                logger.warning("Opción de menu (rol) no válida: %s", tipo)
+            else:
+                try:
+                    self.gestion.agregarCuerpoTecnico(nombre, apellidos, rol)
+                except ValueError as e:
+                    print(f"Error al agregar miembro del cuerpo técnico: {e}")
+                    logger.warning("Error al agregar miembro del cuerpo técnico: %s", e)
+
+        else:
+            print("Tipo no válido. Debe ser 1 o 2.")
+            logger.warning("Opción de menú no válida: %s", tipo)
+

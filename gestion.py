@@ -5,7 +5,7 @@ import logging
 import random
 from typing import Dict, Optional, Type
 
-from models import Heroe, Personaje, Villano
+from models import Heroe, Personaje, Villano, Miembro, Jugador, CuerpoTecnico
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,10 @@ class Gestion:
     def __init__(self):
         self.heroes: Dict[int, Heroe] = {}
         self.villanos: Dict[int, Villano] = {}
-        self._siguiente_id = 1
+        self._siguiente_idPersonajes = 1
+        self.siguiente_idMiembros=1
+        self.plantilla=Dict[int,Miembro]
+
 
     def _obtener_diccionario(self, tipo: str):
         tipo = tipo.strip().lower()
@@ -39,13 +42,13 @@ class Gestion:
         try:
             diccionario = self._obtener_diccionario(tipo)
             fecha = self._leer_fecha(fecha_nacimiento)
-            identificador = self._siguiente_id
+            identificador = self._siguiente_idPersonajes
             clase: Type[Personaje] = Heroe if diccionario is self.heroes else Villano
 
             personaje = clase(identificador, nombre, apellidos, fecha)
             personaje.generar_cualidades()
             diccionario[identificador] = personaje
-            self._siguiente_id += 1
+            self._siguiente_idPersonajes += 1
 
             logger.info(
                 "Creado %s id=%s nombre=%s %s",
@@ -169,3 +172,40 @@ class Gestion:
         except Exception:
             logger.exception("Error al eliminar personaje.")
             raise
+
+    def escribirEnArchivoSql(self,sentencia: str) -> None:
+        try:
+            with open("sql/consulta.sql", "a", encoding="utf-8") as f:
+                f.write(sentencia + "\n")
+            logger.info(sentencia)
+        except Exception:
+            logger.exception("Error al escribir en el archivo SQL.")
+            raise
+
+
+    def agregarJugador(self, nombre: str, apellidos: str, posicion) -> None:
+        jugador_Creado=""
+        try:
+            identificador = self.siguiente_idMiembros
+            jugador = Jugador(identificador, nombre, apellidos, posicion)
+            self.plantilla[identificador] = jugador
+            self.siguiente_idMiembros += 1
+            self.escribirEnArchivoSql(f"INSERT INTO jugadores (id, nombre, apellidos, posicion) VALUES ({identificador}, '{nombre}', '{apellidos}', '{posicion}');")
+            jugador_Creado=jugador
+        except Exception:
+            logger.exception("Error al agregar jugador.")
+            raise
+
+    def agregarCuerpoTecnico(self, nombre: str, apellidos: str, rol) -> None:
+        miembro_Creado=""
+        try:
+            identificador = self.siguiente_idMiembros
+            miembro = Miembro(identificador, nombre, apellidos, rol)
+            self.plantilla[identificador] = miembro
+            self.siguiente_idMiembros += 1
+            self.escribirEnArchivoSql(f"INSERT INTO cuerpo_tecnico (id, nombre, apellidos, rol) VALUES ({identificador}, '{nombre}', '{apellidos}', '{rol}');")
+            miembro_Creado=miembro
+        except Exception:
+            logger.exception("Error al agregar miembro del cuerpo técnico.")
+            raise
+

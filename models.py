@@ -112,3 +112,28 @@ class Villano(Personaje):
             "ausencias",
             "hablador",
         )
+
+class Miembro:
+    def __init__(self,identificador,nombre,apellidos,rol=str):
+        if not isinstance(identificador, int) or identificador <= 0:
+            raise ValueError("El identificador debe ser un entero positivo.")
+        if not nombre or not nombre.strip():
+            raise ValueError("El nombre no puede estar vacío.")
+        if not apellidos or not apellidos.strip():
+            raise ValueError("Los apellidos no pueden estar vacíos.")
+        if not rol or not rol.strip():
+            raise ValueError("El rol no puede estar vacío.")
+        self.identificador=identificador
+        self.nombre=nombre
+        self.apellidos=apellidos
+        self.rol=rol
+
+class Jugador(Miembro):
+    def __init__(self,identificador,nombre,apellidos,posicion):
+        super().__init__(identificador,nombre,apellidos)
+        self.posicion=posicion
+
+class CuerpoTecnico(Miembro):
+    def __init__(self,identificador,nombre,apellidos,rol):
+        super().__init__(identificador,nombre,apellidos)
+        self.rol=rol
