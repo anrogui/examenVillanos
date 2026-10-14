@@ -32,7 +32,7 @@ def main() -> None:
     try:
         gestion = Gestion()
         menu = Menu(gestion)
-        menu.mostrar()
+        menu.mostrarMenuPrincipal()
     except Exception:
         logger.exception("Error fatal en la aplicación.")
         print("La aplicación ha finalizado por un error. Consulta aplicacion.log.")
