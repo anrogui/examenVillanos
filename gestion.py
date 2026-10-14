@@ -18,7 +18,7 @@ class Gestion:
         self.villanos: Dict[int, Villano] = {}
         self._siguiente_idPersonajes = 1
         self.siguiente_idMiembros=1
-        self.plantilla=Dict[int,Miembro]
+        self.plantilla: Dict[int, Miembro] = {}
 
 
     def _obtener_diccionario(self, tipo: str):
@@ -182,29 +182,35 @@ class Gestion:
             logger.exception("Error al escribir en el archivo SQL.")
             raise
 
+    def listar_plantilla(self) -> list:
+        """Devuelve los miembros de la plantilla en orden de registro."""
+        try:
+            miembros = list(self.plantilla.values())
+            logger.info("Listado de plantilla solicitado")
+            return miembros
+        except Exception:
+            logger.exception("Error al listar la plantilla.")
+            raise
+
 
     def agregarJugador(self, nombre: str, apellidos: str, posicion) -> None:
-        jugador_Creado=""
         try:
             identificador = self.siguiente_idMiembros
             jugador = Jugador(identificador, nombre, apellidos, posicion)
             self.plantilla[identificador] = jugador
             self.siguiente_idMiembros += 1
             self.escribirEnArchivoSql(f"INSERT INTO jugadores (id, nombre, apellidos, posicion) VALUES ({identificador}, '{nombre}', '{apellidos}', '{posicion}');")
-            jugador_Creado=jugador
         except Exception:
             logger.exception("Error al agregar jugador.")
             raise
 
     def agregarCuerpoTecnico(self, nombre: str, apellidos: str, rol) -> None:
-        miembro_Creado=""
         try:
             identificador = self.siguiente_idMiembros
-            miembro = Miembro(identificador, nombre, apellidos, rol)
+            miembro = CuerpoTecnico(identificador, nombre, apellidos, rol)
             self.plantilla[identificador] = miembro
             self.siguiente_idMiembros += 1
             self.escribirEnArchivoSql(f"INSERT INTO cuerpo_tecnico (id, nombre, apellidos, rol) VALUES ({identificador}, '{nombre}', '{apellidos}', '{rol}');")
-            miembro_Creado=miembro
         except Exception:
             logger.exception("Error al agregar miembro del cuerpo técnico.")
             raise

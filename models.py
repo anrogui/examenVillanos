@@ -114,26 +114,27 @@ class Villano(Personaje):
         )
 
 class Miembro:
-    def __init__(self,identificador,nombre,apellidos,rol=str):
+    def __init__(self, identificador, nombre, apellidos):
         if not isinstance(identificador, int) or identificador <= 0:
             raise ValueError("El identificador debe ser un entero positivo.")
         if not nombre or not nombre.strip():
             raise ValueError("El nombre no puede estar vacío.")
         if not apellidos or not apellidos.strip():
             raise ValueError("Los apellidos no pueden estar vacíos.")
-        if not rol or not rol.strip():
-            raise ValueError("El rol no puede estar vacío.")
-        self.identificador=identificador
-        self.nombre=nombre
-        self.apellidos=apellidos
-        self.rol=rol
+        self.identificador = identificador
+        self.nombre = nombre.strip()
+        self.apellidos = apellidos.strip()
 
 class Jugador(Miembro):
-    def __init__(self,identificador,nombre,apellidos,posicion):
-        super().__init__(identificador,nombre,apellidos)
-        self.posicion=posicion
+    def __init__(self, identificador, nombre, apellidos, posicion):
+        super().__init__(identificador, nombre, apellidos)
+        if not posicion or not posicion.strip():
+            raise ValueError("La posición no puede estar vacía.")
+        self.posicion = posicion.strip()
 
 class CuerpoTecnico(Miembro):
-    def __init__(self,identificador,nombre,apellidos,rol):
-        super().__init__(identificador,nombre,apellidos)
-        self.rol=rol
+    def __init__(self, identificador, nombre, apellidos, rol):
+        super().__init__(identificador, nombre, apellidos)
+        if not rol or not rol.strip():
+            raise ValueError("El rol no puede estar vacío.")
+        self.rol = rol.strip()

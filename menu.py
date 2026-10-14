@@ -2,6 +2,7 @@
 
 import logging
 from gestion import Gestion
+from models import CuerpoTecnico, Jugador
 
 logger = logging.getLogger(__name__)
 
@@ -114,8 +115,7 @@ class Menu:
                 if o==1:
                     self.menuCrearMiembro()
                 elif o==2:
-                    #self.gestion.listarPlantilla()
-                    print("La opcion 2 está en desarrollo.")
+                    self._listar_plantilla()
                 elif o==3:
                     #self.gestion.crearPlantilla()
                     print("La opcion 3 está en desarrollo.")
@@ -136,6 +136,31 @@ class Menu:
             except Exception:
                 logger.exception("Error no controlado en el menú.")
                 print("Se ha producido un error. Consulta el archivo aplicacion.log.")
+
+    def _listar_plantilla(self) -> None:
+        miembros = self.gestion.listar_plantilla()
+        if not miembros:
+            print("La plantilla está vacía.")
+            return
+
+        print("========== PLANTILLA DE FÚTBOL ==========")
+        for miembro in miembros:
+            if type(miembro)==Jugador:
+                tipo = "Jugador"
+            elif type(miembro)==CuerpoTecnico:
+                tipo = "Cuerpo técnico"
+            else:
+                tipo = "Miembro"
+
+            print(f"\nID: {miembro.identificador}")
+            print(f"Tipo: {tipo}")
+            print(f"Nombre: {miembro.nombre}")
+            print(f"Apellidos: {miembro.apellidos}")
+            if isinstance(miembro, Jugador):
+                print(f"Posición: {miembro.posicion.capitalize()}")
+            elif isinstance(miembro, CuerpoTecnico):
+                print(f"Rol: {miembro.rol.capitalize()}")
+            print("-----------------------------------------")
 
     def mostrarMenuPrincipal(self):
         while True:
@@ -203,4 +228,3 @@ class Menu:
         else:
             print("Tipo no válido. Debe ser 1 o 2.")
             logger.warning("Opción de menú no válida: %s", tipo)
-
