@@ -10,6 +10,8 @@ import os
 def configurar_logging() -> None:
     # Crear la carpeta logs si no existe
     os.makedirs("logs", exist_ok=True)
+    # Crear carpeta sql si no existe
+    os.makedirs("sql", exist_ok=True)
 
     logging.basicConfig(
         level=logging.INFO,

@@ -215,3 +215,32 @@ class Gestion:
             logger.exception("Error al agregar miembro del cuerpo técnico.")
             raise
 
+    def generarPlantilla(self):
+    ##Para que sea 100% funcional habrá que importar la librería Faker
+    # Se puede instalar con pip install Faker
+        try:
+            from faker import Faker
+            fake = Faker()
+            posiciones = ["portero", "defensa", "centrocampista", "delantero"]
+            roles = ["entrenador", "asistente", "preparador físico", "médico", "psicólogo"]
+            i=0
+            j=0
+            # Generar jugadores
+            for j in range(23):
+                nombre = fake.first_name()
+                apellidos = fake.last_name()
+                posicion = random.choice(posiciones)
+                self.agregarJugador(nombre, apellidos, posicion)
+                i += 1
+
+            # Generar miembros cuerpo técnico
+            for j in range(5):
+                nombre = fake.first_name()
+                apellidos = fake.last_name()
+                rol = random.choice(roles)
+                self.agregarCuerpoTecnico(nombre, apellidos, rol)
+
+            logger.info("Plantilla generada automáticamente con Faker.")
+        except Exception:
+            logger.exception("Error al generar la plantilla automáticamente.")
+            raise

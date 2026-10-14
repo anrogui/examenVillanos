@@ -1,6 +1,8 @@
 """Menú de consola de la aplicación."""
 
 import logging
+
+import gestion
 from gestion import Gestion
 from models import CuerpoTecnico, Jugador
 
@@ -117,10 +119,8 @@ class Menu:
                 elif o==2:
                     self._listar_plantilla()
                 elif o==3:
-                    #self.gestion.crearPlantilla()
-                    print("La opcion 3 está en desarrollo.")
+                    self.gestion.generarPlantilla()
                 elif o==4:
-                    #print("Saliendo del menú de plantillas...")
                     print("Saliendo del menú de plantillas...")
                     break
                 else:
@@ -156,10 +156,10 @@ class Menu:
             print(f"Tipo: {tipo}")
             print(f"Nombre: {miembro.nombre}")
             print(f"Apellidos: {miembro.apellidos}")
-            if isinstance(miembro, Jugador):
-                print(f"Posición: {miembro.posicion.capitalize()}")
-            elif isinstance(miembro, CuerpoTecnico):
-                print(f"Rol: {miembro.rol.capitalize()}")
+            if type(miembro) == Jugador:
+                print(f"Posición: {miembro.posicion}")
+            elif type(miembro) == CuerpoTecnico:
+                print(f"Rol: {miembro.rol}")
             print("-----------------------------------------")
 
     def mostrarMenuPrincipal(self):
